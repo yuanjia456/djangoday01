@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../static/js/jquery-2.1.0.js"></script>
+    <script>
+        $(function () {
+            $("#t").click(function () {
+                var n = $("#name").val()
+                var p = $("#nn").val()
+
+                if (''==n){
+                    $("#msg").html("不能为空");
+                    return false
+                }
+
+                if (''==p){
+                    $("#msg_t").html("不能为空");
+                    return false
+                }
+
+                $("#msg").html("")
+                $("#msg_t").html("")
+                return true
+            })
+        })
+    </script>
+</head>
+<body>
+<form action="" method="post">{% csrf_token %}
+    <p>添加员工信息</p>
+    <table>
+        <tr>
+            <td>姓名：<input type="text" name="username" id="name"></td>
+            <td><span id="msg"></span></td>
+        </tr>
+        <tr>
+            <td>工号：<input type="text" name="number" id="nn"></td>
+            <td><span id="msg_t"></span></td>
+        </tr>
+        <tr>
+            <td>性别：
+                <input type="radio" name="gender"value="男">男
+                <input type="radio" name="gender" value="女">女
+            </td>
+        </tr>
+        <tr>
+            <td>
+                部门：
+                <select name="department" id="">
+                    {% for department in department %}
+                        <option value="{{ department.id }}">{{ department.dname }}</option>
+                    {% endfor %}
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                公司：
+                <select name="company" id="">
+                    {% for company in company %}
+                        <option value="{{ company.id }}">{{ company.cname }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+    </table>
+    <button id="t">添加</button>
+</form>
+</body>
+</html>
