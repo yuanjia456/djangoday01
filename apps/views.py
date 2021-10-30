@@ -1,6 +1,13 @@
 from django.shortcuts import render, redirect
 from apps.models import company, department, user
-# Create your views here.
+from jinja2 import Environment, FileSystemLoader
+from pyecharts.globals import CurrentConfig
+from django.http import HttpResponse
+import collections
+
+
+from pyecharts import options as opts
+from pyecharts.charts import Bar
 
 
 def index(request):
@@ -15,6 +22,32 @@ def index(request):
     }
     return render(request, "index.html", context=context)
 
+
+def demo(request):
+    dep = department.objects.all()
+    u = user.objects.all()
+    d = [i.dname for i in dep]
+    t = [i.dep_id_id for i in u]
+    # 利用collections包求出列表中每个数的次数
+    # coll = collections.Counter(t).values()
+    # print(coll)
+    # 求出列表每个数的次数
+    result = {}
+    for t_shu in t:
+        if result.get(t_shu) == None:
+            result[t_shu] = 1
+        else:
+            result[t_shu] += 1
+    # 字典值转换列表
+    value_list = list(result.values())
+    c = (
+        Bar()
+        .add_xaxis(d)
+        .add_yaxis("人数", value_list)
+        .set_global_opts(title_opts=opts.TitleOpts(title="Bar-基本示例", subtitle="我是副标题"))
+    )
+    return HttpResponse(c.render_embed())
+    # return HttpResponse("ttttt")
 
 def add(request):
     company_all = company.objects.all()
